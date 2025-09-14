@@ -138,7 +138,6 @@ int main(int argc, char *argv[]) {
             char nome_arquivo[256];
             sprintf(nome_arquivo, "Resultados/Processos/resultado_%d.txt", p);
             Gravar_Matriz(colunas2, resultado, nome_arquivo, tempo_gasto, start, end);
-            printf("Processo %d: Salvo no arquivo %s. Tempo: %f segundos\n", p, nome_arquivo, tempo_gasto);
 
             // Termina o processo filho
             exit(0);

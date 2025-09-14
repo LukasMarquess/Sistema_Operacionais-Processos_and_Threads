@@ -55,6 +55,7 @@ e `<P>` representa um número inteiro que diz respeito a quantos processos/threa
 - Certifique-se de que as matrizes de entrada tenham dimensões compatíveis para multiplicação.
 - Os resultados são salvos no diretório `Resultados/`.
 - O projeto permite avaliar o impacto do paralelismo no desempenho da multiplicação de matrizes.
+- O tempo de execução está no final de cada arquivo .txt
 
 ---
 

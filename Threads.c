@@ -168,7 +168,6 @@ int main(int argc, char *argv[]) {
         char nome_arquivo[256];
         sprintf(nome_arquivo, "Resultados/Threads/resultado_%d.txt", thread_data[i].t);
         Gravar_Matriz(thread_data[i].colunas1, thread_data[i].Resultado, nome_arquivo, tempo_gasto, start, end);
-        printf("Thread %d: Salvo no arquivo %s.\n com tempo de execução: %f segundos\n", thread_data[i].t, nome_arquivo, tempo_gasto);
     }
 
     Liberar_Memoria(matriz1, linhas1);
