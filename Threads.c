@@ -86,6 +86,10 @@ void Liberar_Memoria(int **matriz, int linhas) {
 void *Thread_Multiplica(void *arg){
     ThreadData *data = (ThreadData *) arg;
 
+    struct timeval inicio, fim;
+    double tempo_gasto;
+    gettimeofday(&inicio, NULL);
+
     int start = data->t * data->P;
     int end = (data->t + 1) * data->P;
     if (end > data->colunas1 * data->linhas2) {
@@ -97,6 +101,13 @@ void *Thread_Multiplica(void *arg){
         int j = idx % data->colunas1;
         data->Resultado[i][j] = Calcular_Elemento(data->Matriz1, data->Matriz2, i, j, data->colunas1);
     }
+
+    gettimeofday(&fim, NULL);
+    tempo_gasto = (fim.tv_sec - inicio.tv_sec) + (fim.tv_usec - inicio.tv_usec) / 1e6;
+
+    char nome_arquivo[256];
+    sprintf(nome_arquivo, "Resultados/Threads/resultado_%d.txt", data->t);
+    Gravar_Matriz(data->colunas1, data->Resultado, nome_arquivo, tempo_gasto, start, end);
 
     pthread_exit(NULL);
 
@@ -136,9 +147,6 @@ int main(int argc, char *argv[]) {
             resultado[i] = calloc(colunas2, sizeof(int));
         }
 
-    clock_t inicio, fim;
-    double tempo_gasto;
-
     for (int i = 0; i < Numero_Threads; i++) {
         thread_data[i].thread_id = i;
         thread_data[i].Matriz1 = matriz1;
@@ -149,25 +157,13 @@ int main(int argc, char *argv[]) {
         thread_data[i].t = i;
         thread_data[i].P = P;
 
-        inicio = clock();
+        
         pthread_create(&threads[i], NULL, Thread_Multiplica, (void *) &thread_data[i]);
-        fim = clock();
-        tempo_gasto = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
-
     }
 
     for (int i = 0; i < Numero_Threads; i++) {
         pthread_join(threads[i], NULL);
 
-        int start = i * P;
-        int end = (i + 1) * P;
-        if (end > linhas1*colunas2){
-            end = linhas1*colunas2;
-        } 
-
-        char nome_arquivo[256];
-        sprintf(nome_arquivo, "Resultados/Threads/resultado_%d.txt", thread_data[i].t);
-        Gravar_Matriz(thread_data[i].colunas1, thread_data[i].Resultado, nome_arquivo, tempo_gasto, start, end);
     }
 
     Liberar_Memoria(matriz1, linhas1);

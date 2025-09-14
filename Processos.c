@@ -97,10 +97,7 @@ int main(int argc, char *argv[]) {
     int processos = (int) ceil((double) (colunas1*linhas2) / P);
     printf("Número de processos: %d\n", processos);
 
-
-    clock_t inicio, fim;
-    double tempo_gasto;
-    
+   
     // Alocação da matriz resultado
     int **resultado = malloc(linhas1 * sizeof(int *));
         for (int i = 0; i < linhas1; i++) {
@@ -120,7 +117,9 @@ int main(int argc, char *argv[]) {
 
         else if(pid == 0){ // Processo filho
             
-            inicio = clock();
+            struct timeval inicio, fim;
+            gettimeofday(&inicio, NULL);
+
             int start = p * P;
             int end = (p + 1) * P;
             if (end > linhas1*colunas2){
@@ -132,8 +131,9 @@ int main(int argc, char *argv[]) {
                 int j = idx % colunas2;
                 resultado[i][j] = Calcular_Elemento(matriz1, matriz2, i, j, colunas1);
             }
-            fim = clock();
-            tempo_gasto = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+            
+            gettimeofday(&fim, NULL);
+            double tempo_gasto = (fim.tv_sec - inicio.tv_sec) + (fim.tv_usec - inicio.tv_usec) / 1e6;
 
             char nome_arquivo[256];
             sprintf(nome_arquivo, "Resultados/Processos/resultado_%d.txt", p);
