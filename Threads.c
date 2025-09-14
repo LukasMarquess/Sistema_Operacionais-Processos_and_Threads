@@ -157,7 +157,6 @@ int main(int argc, char *argv[]) {
         thread_data[i].t = i;
         thread_data[i].P = P;
 
-        
         pthread_create(&threads[i], NULL, Thread_Multiplica, (void *) &thread_data[i]);
     }
 

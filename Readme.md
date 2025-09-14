@@ -35,7 +35,7 @@ gcc -o Processos Processos.c -lm
 
 ### Compilar o código com threads
 ```bash
-gcc -o Threads Threads.c -lpthread -lm
+gcc -o Threads Threads.c -pthread -lm
 ```
 
 ## Como Executar

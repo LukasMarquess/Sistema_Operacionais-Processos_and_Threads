@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <sys/time.h>
 
 // Lê uma matriz a partir de um arquivo
 int **Ler_Matriz(const char *arquivo_txt, int *linhas, int *colunas) {
@@ -101,15 +101,16 @@ int main(int argc, char *argv[]) {
     int **matriz1 = Ler_Matriz(argv[1], &linhas1, &colunas1);
     int **matriz2 = Ler_Matriz(argv[2], &linhas2, &colunas2);
 
-    clock_t inicio, fim;
+    struct timeval inicio, fim;
     double tempo_gasto;
+    gettimeofday(&inicio, NULL);
     int **resultado = NULL;
  
-    inicio = clock();
+    gettimeofday(&inicio, NULL);
     resultado = Multiplicar_Matrizes(matriz1, linhas1, colunas1, matriz2, linhas2, colunas2);
-    fim = clock();
+    gettimeofday(&fim, NULL);
 
-    tempo_gasto = (double)(fim - inicio) / CLOCKS_PER_SEC;
+    tempo_gasto = (double)(fim.tv_sec - inicio.tv_sec) + (double)(fim.tv_usec - inicio.tv_usec) / 1e6;
 
     Gravar_Matriz(colunas1, linhas2, resultado, "Resultados/Sequencial/MatrizResultado.txt", tempo_gasto);
     printf("Tempo de execução: %f segundos\n", tempo_gasto);
