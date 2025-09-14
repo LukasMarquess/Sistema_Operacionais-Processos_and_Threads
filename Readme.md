@@ -40,7 +40,7 @@ gcc -o Threads Threads.c -lpthread -lm
 
 ## Como Executar
 
-Cada executável espera argumentos específicos.
+Cada executável espera argumentos específicos:
 
 ```bash
 ./CriarMatriz <Linhas_M1> <Colunas_M1> <Linhas_M2> <Colunas_M2>
@@ -49,7 +49,7 @@ Cada executável espera argumentos específicos.
 ./Threads Matriz1.txt Matriz2.txt <P>
 ```
 Onde `<linhas_M>` `<Colunas_M>` representa um número inteiro de linhas e colunas, respectivamente, que as matrizes irão ter 
-E `<P>` representa um número inteiro que diz respeito a quantos processos/threads vamos ter a cada P elementos da Matriz.
+e `<P>` representa um número inteiro que diz respeito a quantos processos/threads vamos ter a cada P elementos da Matriz.
 
 ## Observações
 - Certifique-se de que as matrizes de entrada tenham dimensões compatíveis para multiplicação.
