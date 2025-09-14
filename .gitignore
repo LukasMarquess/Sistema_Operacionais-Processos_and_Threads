@@ -1,0 +1,12 @@
+Resultados/Sequencial/*.txt
+!Resultados/Sequencial/.gitkeep
+!Resultados/Processos/.gitkeep
+!Resultados/Threads/.gitkeep
+Resultados/Processos/*.txt
+Resultados/Threads/*.txt
+CriarMatriz
+Processos
+Threads
+Matriz1.txt
+Matriz2.txt
+Sequencial
