@@ -38,6 +38,11 @@ gcc -o Processos Processos.c -lm
 gcc -o Threads Threads.c -pthread -lm
 ```
 
+### Compilar o código que ler os tempos dos arquivos
+```bash
+gcc -o Tempo Tempo.c -pthread -lm
+```
+
 ## Como Executar
 
 Cada executável espera argumentos específicos:
@@ -47,9 +52,11 @@ Cada executável espera argumentos específicos:
 ./Sequencial Matriz1.txt Matriz2.txt
 ./Processos Matriz1.txt Matriz2.txt <P>
 ./Threads Matriz1.txt Matriz2.txt <P>
+./Tempo
 ```
 Onde `<linhas_M>` `<Colunas_M>` representa um número inteiro de linhas e colunas, respectivamente, que as matrizes irão ter 
 e `<P>` representa um número inteiro que diz respeito a quantos processos/threads vamos ter a cada P elementos da Matriz.
+Quando você for executar Tempo ele vai perguntar se você quer o maior tempo de processos ou threads. Logo em seguida ele vai perguntar até qual arquivo é pra ler: Se seu exemplo deu 10 processos/Threads você vai dizer que ele é pra ler até o arquivo 9. 
 
 ## Observações
 - Certifique-se de que as matrizes de entrada tenham dimensões compatíveis para multiplicação.

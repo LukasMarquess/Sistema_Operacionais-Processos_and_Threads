@@ -8,13 +8,10 @@
 #include <time.h>
 #include <pthread.h>
 
-//Estrutura para passar múltiplos argumentos para cada thread
-typedef struct {
-        int thread_id;
-        int **Matriz1, **Matriz2, **Resultado;
-        int colunas1, linhas2;
-        int t, P;
-    } ThreadData;
+// Variáveis Globais, para facilitar o uso nas threads
+int linhas1, colunas1, linhas2, colunas2;
+int **matriz1, **matriz2, **resultado;
+int P, Numero_Threads;
 
 // Lê uma matriz a partir de um arquivo
 int **Ler_Matriz(const char *arquivo_txt, int *linhas, int *colunas) {
@@ -84,30 +81,31 @@ void Liberar_Memoria(int **matriz, int linhas) {
 
 // Função executada por cada thread
 void *Thread_Multiplica(void *arg){
-    ThreadData *data = (ThreadData *) arg;
+
+    int p = *((int*)arg);
 
     struct timeval inicio, fim;
     double tempo_gasto;
     gettimeofday(&inicio, NULL);
 
-    int start = data->t * data->P;
-    int end = (data->t + 1) * data->P;
-    if (end > data->colunas1 * data->linhas2) {
-        end = data->colunas1 * data->linhas2;
+    int start = p * P;
+    int end = (p + 1) * P;
+    if (end > colunas1 * colunas2) {
+        end = colunas1 * colunas2;
     }
 
     for (int idx = start; idx < end; idx++) {
-        int i = idx / data->colunas1;
-        int j = idx % data->colunas1;
-        data->Resultado[i][j] = Calcular_Elemento(data->Matriz1, data->Matriz2, i, j, data->colunas1);
+        int i = idx / colunas2;
+        int j = idx % colunas2;
+        resultado[i][j] = Calcular_Elemento(matriz1, matriz2, i, j, colunas1);
     }
 
     gettimeofday(&fim, NULL);
     tempo_gasto = (fim.tv_sec - inicio.tv_sec) + (fim.tv_usec - inicio.tv_usec) / 1e6;
 
     char nome_arquivo[256];
-    sprintf(nome_arquivo, "Resultados/Threads/resultado_%d.txt", data->t);
-    Gravar_Matriz(data->colunas1, data->Resultado, nome_arquivo, tempo_gasto, start, end);
+    sprintf(nome_arquivo, "Resultados/Threads/resultado_%d.txt", p);
+    Gravar_Matriz(colunas2, resultado, nome_arquivo, tempo_gasto, start, end);
 
     pthread_exit(NULL);
 
@@ -121,10 +119,9 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    int linhas1, colunas1, linhas2, colunas2;
-
-    int **matriz1 = Ler_Matriz(argv[1], &linhas1, &colunas1);
-    int **matriz2 = Ler_Matriz(argv[2], &linhas2, &colunas2);
+    // Leitura das matrizes
+    matriz1 = Ler_Matriz(argv[1], &linhas1, &colunas1);
+    matriz2 = Ler_Matriz(argv[2], &linhas2, &colunas2);
 
      // Verifica se as matrizes podem ser multiplicadas
     if (colunas1 != linhas2) {
@@ -133,31 +130,23 @@ int main(int argc, char *argv[]) {
     }
 
     // Calcula o número de threads
-    int P = atoi(argv[3]);
-    int Numero_Threads = (int) ceil((double) (colunas1*linhas2) / P);
+    P = atoi(argv[3]);
+    Numero_Threads = (int) ceil((double) (colunas1*linhas2) / P);
     printf("Número de threads: %d\n", Numero_Threads);
 
     // Criação do Vetor de threads, uma para guardar os IDs das threads e outra para guardar os dados de cada thread
     pthread_t threads[Numero_Threads];
-    ThreadData thread_data[Numero_Threads];
+    int thread_ids[Numero_Threads];
 
     // Alocação da matriz resultado
-    int **resultado = malloc(linhas1 * sizeof(int *));
+    resultado = malloc(linhas1 * sizeof(int *));
         for (int i = 0; i < linhas1; i++) {
             resultado[i] = calloc(colunas2, sizeof(int));
         }
 
     for (int i = 0; i < Numero_Threads; i++) {
-        thread_data[i].thread_id = i;
-        thread_data[i].Matriz1 = matriz1;
-        thread_data[i].Matriz2 = matriz2;
-        thread_data[i].Resultado = resultado;
-        thread_data[i].colunas1 = colunas1;
-        thread_data[i].linhas2 = linhas2;
-        thread_data[i].t = i;
-        thread_data[i].P = P;
-
-        pthread_create(&threads[i], NULL, Thread_Multiplica, (void *) &thread_data[i]);
+        thread_ids[i] = i;
+        pthread_create(&threads[i], NULL, Thread_Multiplica, (void *) &thread_ids[i]);
     }
 
     for (int i = 0; i < Numero_Threads; i++) {
