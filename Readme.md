@@ -40,7 +40,7 @@ gcc -o Threads Threads.c -pthread -lm
 
 ### Compilar o código que ler os tempos dos arquivos
 ```bash
-gcc -o Tempo Tempo.c -pthread -lm
+gcc -o Tempo Tempo.c 
 ```
 
 ## Como Executar
