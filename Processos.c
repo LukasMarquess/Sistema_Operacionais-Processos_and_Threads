@@ -103,10 +103,12 @@ int main(int argc, char *argv[]) {
         for (int i = 0; i < linhas1; i++) {
             resultado[i] = calloc(colunas2, sizeof(int));
         }
-
+    
+    struct timeval inicio, fim;
 
    for(int p = 0; p < processos; p++){
         // Cria um novo processo
+        gettimeofday(&inicio, NULL);
         pid_t pid = fork();
 
         // Verifica se houve erro na criação do processo
@@ -116,9 +118,6 @@ int main(int argc, char *argv[]) {
         }
 
         else if(pid == 0){ // Processo filho
-            
-            struct timeval inicio, fim;
-            gettimeofday(&inicio, NULL);
 
             int start = p * P;
             int end = (p + 1) * P;

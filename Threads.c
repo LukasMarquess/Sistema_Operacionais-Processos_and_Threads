@@ -12,6 +12,8 @@
 int linhas1, colunas1, linhas2, colunas2;
 int **matriz1, **matriz2, **resultado;
 int P, Numero_Threads;
+struct timeval inicio, fim;
+double tempo_gasto;
 
 // Lê uma matriz a partir de um arquivo
 int **Ler_Matriz(const char *arquivo_txt, int *linhas, int *colunas) {
@@ -84,10 +86,6 @@ void *Thread_Multiplica(void *arg){
 
     int p = *((int*)arg);
 
-    struct timeval inicio, fim;
-    double tempo_gasto;
-    gettimeofday(&inicio, NULL);
-
     int start = p * P;
     int end = (p + 1) * P;
     if (end > colunas1 * colunas2) {
@@ -145,10 +143,12 @@ int main(int argc, char *argv[]) {
         }
 
     for (int i = 0; i < Numero_Threads; i++) {
+        gettimeofday(&inicio, NULL);
         thread_ids[i] = i;
         pthread_create(&threads[i], NULL, Thread_Multiplica, (void *) &thread_ids[i]);
     }
 
+    // Aguarda a finalização das threads
     for (int i = 0; i < Numero_Threads; i++) {
         pthread_join(threads[i], NULL);
 
