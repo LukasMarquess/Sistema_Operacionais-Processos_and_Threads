@@ -105,9 +105,9 @@ int main(int argc, char *argv[]) {
         }
     
     struct timeval inicio, fim;
-
+    
+   // Criação dos processos
    for(int p = 0; p < processos; p++){
-        // Cria um novo processo
         gettimeofday(&inicio, NULL);
         pid_t pid = fork();
 

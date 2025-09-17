@@ -142,6 +142,7 @@ int main(int argc, char *argv[]) {
             resultado[i] = calloc(colunas2, sizeof(int));
         }
 
+    // Criação das threads
     for (int i = 0; i < Numero_Threads; i++) {
         gettimeofday(&inicio, NULL);
         thread_ids[i] = i;
