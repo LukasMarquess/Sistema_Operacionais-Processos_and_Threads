@@ -113,8 +113,6 @@ int main(int argc, char *argv[]) {
     tempo_gasto = (double)(fim.tv_sec - inicio.tv_sec) + (double)(fim.tv_usec - inicio.tv_usec) / 1e6;
 
     Gravar_Matriz(colunas1, linhas2, resultado, "Resultados/Sequencial/MatrizResultado.txt", tempo_gasto);
-    printf("Tempo de execução: %f segundos\n", tempo_gasto);
-
 
     Liberar_Memoria(matriz1, linhas1);
     Liberar_Memoria(matriz2, linhas2);
